@@ -1,0 +1,12 @@
+{
+  "name": "HydrantLabs",
+  "version": "0.0.0",
+  "description": "The build system for hydrantlabs.org",
+  "main": "build.js",
+  "author": "Luke Young",
+  "license": "MIT",
+  "dependencies": {
+    "jade": "~1.1.5",
+    "marked": "~0.3.1"
+  }
+}
