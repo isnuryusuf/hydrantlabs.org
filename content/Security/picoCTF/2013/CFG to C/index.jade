@@ -1,0 +1,20 @@
+//-; { "title": "CFG to C (70) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: CFG to C (70)
+	---
+	## Challenge:
+	Wouldn't it be cool to be able to have one of these patrol drones to do your bidding?! Figure out the correct sequence of C functions from the following [control flow graphs](assets/ASM%20CFG%20C.html) and you should be well on your way.
+
+	## Solution:
+	This one is going to be slightly harder to explain in text but I'll give it a go.
+
+	Let's start with an easy one, the final diagram is very simple. The command `idiv` is a big hint toward the matching function `modulo` indicating the last parameter is A.
+
+	Next up let's look at the second diagram. It shows a simple function performing a comparison and based on the result copying a different value to eax then returning. This function clearly represents the function `control` indicating the second paramater is C.
+
+	Continuing on we can look at the first diagram which shows a basic loop that decrements a value then on each iteration. This matches the `loop` function inficating the first paramater is B.
+
+	By the process of elimination we can determine the third paramater is D leaving us with the final flag:
+	```
+	BCDA
+	```

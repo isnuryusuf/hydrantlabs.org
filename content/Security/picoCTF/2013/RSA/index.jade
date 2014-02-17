@@ -1,0 +1,33 @@
+//-; { "title": "RSA (70) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: RSA (70)
+	---
+	## Challenge:
+	Math is cool! Use the RSA algorithm to decode the secret message, c, p, q, and e are parameters for the RSA algorithm. [Problem](assets/rsa.txt)
+
+	## Solution:
+	After a quick look on Wikipedia about the calculations involved in the RSA algorithm I created the following java program to solve the program:
+	```java
+	import java.math.BigInteger;
+
+	public class RSA {
+		public static void main(String []args){
+			BigInteger p = new BigInteger("9648423029010515676590551740010426534945737639235739800643989352039852507298491399561035009163427050370107570733633350911691280297777160200625281665378482");
+			BigInteger q = new BigInteger("11874843837980297032092405848653656852760910154543380907650040190704283358909208578251063047732443992230647903887510065547947313543299303261986053486569406");
+			BigInteger e = new BigInteger("65537");
+			BigInteger c = new BigInteger("83208298995174604174773590298203639360540024871256126892889661345742403314929861939100492666605647316646576486526217457006376842280869728581726746401583705899941768214138742259689334840735633553053887641847651173776251820293087212885670180367406807406765923638973161375817392737747832762751690104423869019034");
+			
+			
+			BigInteger product = p.multiply(q);
+			BigInteger pp = new BigInteger("1").add(p).multiply(new BigInteger("1").add(q));
+			
+			BigInteger d = e.modInverse(product);
+			BigInteger answer = c.modPow(d, pp);
+			System.out.println(answer.toString());
+		}
+	}
+	```
+	Running the program we get our flag:
+	```
+	5577446633554466577768879988
+	```

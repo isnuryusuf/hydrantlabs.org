@@ -1,0 +1,18 @@
+//-; { "title": "Spaceport Map (55) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Spaceport Map (55)
+	---
+	## Challenge:
+	The map of the spaceport is hard to parse, but you're pretty sure there is some hidden information, somewhere...
+
+	![Spaceport Map](assets/spaceportmap.gif)
+
+	## Solution:
+	Examining the file we know it's a gif and made of many individual frames. I used [www.gifexploder.com/](http://www.gifexploder.com/) to expode the gif into each individual frame. The 4th frame looks like this:
+
+	![4th Frame](assets/spaceportmap_4.gif)
+
+	In the bottom right we can see our final key:
+	```
+	Do passports let you fly interstellar?
+	```

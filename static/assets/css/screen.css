@@ -1,0 +1,251 @@
+/* Mixins for colors and elements */
+a, .mix-green { color: rgb(120, 190, 30) !important; }
+.mix-gray { color: rgb(120, 120, 120) !important; }
+
+/* Fix default code colors and display */
+code {
+	margin: 0 2px;
+	padding: 0px 5px;
+	border: 1px solid #ddd;
+	background-color: #f8f8f8;
+	border-radius: 3px;
+	color: rgb(40, 40, 40);
+}
+
+/* Make text a little bigger */
+body {
+	font-size: 16px;
+}
+
+/* Logo in upper right */
+.logo {
+  vertical-align: middle;
+  position: relative;
+  top: -3px;
+  padding-right: 12px;
+}
+
+/* Default fonts if proxima nova fails */
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* Navbar */
+.navbar { background: #FFF; border-radius: 0; }
+.navbar-brand {
+	padding-top: 15px;
+	margin-top: 0;
+	padding-bottom: 30px;
+	font-size: 30px;
+	font-weight: 200;
+}
+.navbar-header {
+	height: 82px;
+}
+.navbar-nav {
+  margin-top: 16px;
+	text-transform: uppercase;
+	font-weight: 600;
+	font-size: 14px;
+}
+@media (max-width: 767px) {
+  .navbar-nav {
+    margin-top: 7.5px;
+  }
+}
+.navbar-toggle {
+  margin-top: 23px;
+}
+
+/* Bottom footer */
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	border-top: 5px solid rgb(40, 40, 40);
+	background-color: rgb(51, 51, 51);
+	color: rgb(200, 200, 200);
+	font-size: 14px;
+	clear: both;
+}
+.footer-space {
+	height: 100px;
+}
+.footer-divider { margin: 0 5px; }
+.credit {
+	padding-top: 4px;
+	margin-bottom: 0;
+}
+.credit > span:nth-child(1), .credit > span:nth-child(3), .credit > span:nth-child(5)  { display: block; }
+.credit > span:nth-child(2), .credit > span:nth-child(4) { display: none; }
+
+/* Fill page */
+html, body { height: 100%; }
+.main-container {
+	border-top: 5px solid rgb(120, 190, 30);
+	min-height: 100%;
+	position: relative;
+}
+
+/* Adjust footer display appropriately */
+@media (min-width: 768px) {
+	.footer-space, .footer { height: 52px !important; }
+	.credit > span:nth-child(1), .credit > span:nth-child(2), .credit > span:nth-child(3) { display: inline-block; }
+	.credit > span:nth-child(5) { display: block; } 
+	.credit > span:nth-child(4) { display: none; }
+}
+@media (min-width: 992px) {
+	.footer-space, .footer { height: 33px !important; }
+	.credit > span:nth-child(4), .credit > span:nth-child(5) { display: inline-block; }
+}
+
+/* GitHub like code highlighting */
+.prettyprint {
+	font-family: Menlo, 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, monospace;
+	font-size: 12px;
+	line-height: 1.5;
+	border: 1px solid #ccc;
+	padding: 10px;
+	display: block;
+	margin: 0 0 10px;
+	font-size: 13px;
+	line-height: 1.428571429;
+	color: #333;
+	word-break: break-all;
+	word-wrap: break-word;
+	background-color: #f5f5f5;
+	border: 1px solid #ccc !important;
+	border-radius: 4px !important;
+}
+
+.pln {
+  color: #333333;
+}
+
+@media screen {
+  .str {
+    color: #dd1144;
+  }
+
+  .kwd {
+    color: #333333;
+  }
+
+  .com {
+    color: #999988;
+  }
+
+  .typ {
+    color: #445588;
+  }
+
+  .lit {
+    color: #445588;
+  }
+
+  .pun {
+    color: #333333;
+  }
+
+  .opn {
+    color: #333333;
+  }
+
+  .clo {
+    color: #333333;
+  }
+
+  .tag {
+    color: navy;
+  }
+
+  .atn {
+    color: teal;
+  }
+
+  .atv {
+    color: #dd1144;
+  }
+
+  .dec {
+    color: #333333;
+  }
+
+  .var {
+    color: teal;
+  }
+
+  .fun {
+    color: #990000;
+  }
+}
+@media print, projection {
+  .str {
+    color: #006600;
+  }
+
+  .kwd {
+    color: #006;
+    font-weight: bold;
+  }
+
+  .com {
+    color: #600;
+    font-style: italic;
+  }
+
+  .typ {
+    color: #404;
+    font-weight: bold;
+  }
+
+  .lit {
+    color: #004444;
+  }
+
+  .pun, .opn, .clo {
+    color: #444400;
+  }
+
+  .tag {
+    color: #006;
+    font-weight: bold;
+  }
+
+  .atn {
+    color: #440044;
+  }
+
+  .atv {
+    color: #006600;
+  }
+}
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* IE indents via margin-left */
+li.L0,
+li.L1,
+li.L2,
+li.L3,
+li.L4,
+li.L5,
+li.L6,
+li.L7,
+li.L8,
+li.L9 {
+  /* */
+}
+
+/* Alternate shading for lines */
+li.L1,
+li.L3,
+li.L5,
+li.L7,
+li.L9 {
+  /* */
+}

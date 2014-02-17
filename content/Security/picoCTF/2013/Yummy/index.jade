@@ -1,0 +1,22 @@
+//-; { "title": "Yummy (60) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Yummy (60)
+	---
+	## Challenge:
+	You want to find out the docking bay numbers for space ships that are ready to launch. Luckily for you, [the website](https://picoctf.com/problems/yummy/) for the docking bay ship status page doesn't seem so secure....
+
+	Enter the docking bay for any of the ships that are awaiting launch.
+
+	## Solution:
+	Examining the source of the webpage we can see the following:
+	```html
+	<!-- DEBUG: Expected Cookie: "authorization=administrator"
+	received Cookie: "..." -->
+	```
+	I've redacted my cookies because they contain active session logins to picoctf.com. But, a quick addition of the cookie with the name `authorization` and value `adminstrator` results in the following valid flags:
+	```
+	DX6-7
+	DX7-2
+	DX9-5
+	DX4-9
+	```

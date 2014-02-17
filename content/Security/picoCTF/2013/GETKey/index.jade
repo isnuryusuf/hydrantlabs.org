@@ -1,0 +1,24 @@
+//-; { "title": "GETKey (50) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: GETKey (50)
+	---
+	## Challenge:
+	There's bound to be a key on the spaceport's [hidden website](https://picoctf.com/problems/getquery/index.php).
+
+	## Solution:
+	Examining the page content we see the following:
+	```html
+	<form action="?admin=false&competition=ccdc" method="GET">
+		<input type="hidden" name="admin" value="false" /> 
+		<input type="hidden" name="competition" value="ccdc" /> 
+		<p><input type="submit" value="Get Key"></p>
+	</form>
+	```
+	When the submit button is pressed the following URL is generated: `/problems/getquery/index.php?admin=false&competition=ccdc`.
+
+	Using some common sense we can change `admin` to `true` and `competition` to `picoctf`.
+
+	Doing so, we receive the following flag:
+	```
+	9fa449c061d64f58de600dfacaa6bd5d
+	```

@@ -1,0 +1,21 @@
+//-; { "title": "Client-Side is the Best Side (75) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Client-Side is the Best Side (75)
+	---
+	## Challenge:
+	Luckily the ship has a [web-based authentication system](assets/clientside.html)! Hmm…even though you don't know the password, I bet you can still get in!
+
+	## Solution:
+	Examining the source we see the following:
+	```javascript
+	if (md5(checkpass) == "03318769a5ee1354f7479acc69755e7c") {
+		alert("Correct!");
+		document.location="./aebe515f7c62b96ad7de047c11aa3228.html";
+	} else {
+		alert("Incorrect password");
+	}
+	```
+	While the authentication attempt does verify that the password (dinosaur) matches the hash we can just manually navigate to the success url. After visiting the page we get the final key:
+	```
+	cl13nt_s1d3_1s_w0rst_s1d3
+	```

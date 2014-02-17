@@ -1,0 +1,24 @@
+//-; { "title": "XMLOL (30) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: XMLOL (30)
+	---
+	## Challenge:
+	The book has instructions on how to dump the corrupted configuration file from the robot's memory. You find a corrupted [XML file](assets/corrupted.xml) and are looking for a configuration key.
+
+	## Solution:
+	This problem is simply testing your ability to bypass xml parsing errors thrown by many browsers. Grabing the file via curl of view-source will result in the following:
+	```xml
+	<?xml version="1.0" encoding="UTF-8" ?>
+	<garbage
+		<writing>
+			<?xml verion="1.0" encoding"UTF-8"
+				is really
+
+				<super_secret_flag>43869723907704170590623572394</super_secret_flag>
+
+	</ gar <bage>
+	```
+	Looking at this it's trivial to extract the flag:
+	```
+	43869723907704170590623572394
+	```

@@ -1,0 +1,81 @@
+//-; { "title": "Bitwise (55) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Bitwise (55)
+	---
+	## Challenge:
+	You see the doors to the loading bay of the hangar, but they are locked. However, you are able to extract the password verification program from the control panel... Can you find the password to gain access to the loading bay?
+
+	Available in [Python](assets/bit.py) or [Java](assets/Bit.java)
+
+	## Solution:
+	First part of problems like these is understanding what is happening. I chose to look at the Java file, but the Python one would work just as well. 
+
+	First off, we can see the program in reading in user input (a password), then running the following:
+	```java
+	if (user_key.length() != 10) {
+		System.out.println("Wrong");
+		return;
+	}
+	```
+	By looking at this we can tell our password must be 10 characters.
+
+	Next we can see this operation is performed on each character:
+	```java
+	user_arr.add((char)((((ch << 5) | (ch >> 3)) ^ 111) & 255));
+	```
+
+	Following this transformation the data is compared with the following:
+	```java
+	char[] verify_arr = {193, 35, 9, 33, 1, 9, 3, 33, 9, 225};
+	```
+
+	If all values match, the result is a `Success`. In this case, it means the password we entered is the flag.
+
+	The first step in finding the solution is to understand what each step of the operation is doing to input. Let's start with the character `a` which has a binary representation of:
+	```
+	1100001
+	```
+	The operation starts by performing a left shift of 5 on the value, which in our case results in:
+	```
+	110000100000
+	```
+	Next it performs a right shift of 3 on the original value, which in our case results in:
+	```
+	1100
+	```
+	Next it performs a bit-wise or on both of the values resulting in the following:
+	```
+	110000101100
+	```
+	The value of the bit-wise or is then bit-wise xor'd with 111 resulting in the following:
+	```
+	110001000011
+	```
+	Finally, the value of the bit-wise xor is bit-wise and'd with 255 resulting in the following:
+	```
+	1000011
+	```
+	This a value of `67` which would then be compared with a value from `verify_arr`.
+
+	Now, let's run through the program in reverse, starting with one of our values from verify_arr, `193` which can be represented in binary as the following:
+	```
+	11000001
+	```
+	The first operation we'll need to reverse is the bit-wise and with 255 which we can do by simply cutting off the result to the last 8 bits (in this case, no change):
+	```
+	11000001
+	```
+	Following this a bit-wise XOR was performed with 111. We can reverse this by taking the binary representation of `111` (`01101111`) and determining what values would be required to get the output listed above. Doing so we get:
+	```
+	10101110
+	```
+	Knowing that our data 5 digits to the left must be the end of our original value and the rest must be the beginning we get the following binary:
+	```
+	01110101
+	```
+	Which can be represented as the letter `u`. 
+
+	Finally, we must repeat the process for all 10 characters. After doing so, we get the following final flag:
+	```
+	ub3rs3cr3t
+	```

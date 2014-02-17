@@ -1,0 +1,19 @@
+//-; { "title": "Classic (70) Solutino picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Classic (70)
+	---
+	## Challenge:
+	Someone or something stuck a random flyer on your space ship that reads:
+	```
+	cslcehesehft ohrumvc zmvm scmk ht ptohmte ehbmc mxmt eufsju eumq pvm dshem mpchgq lvfymt zheu nsce p rmtohg ptk rprmv, fv bfvm vmomtegq lq ofbbft ofbrsemvhwmk effgc. qfsv ymq hc: zumt_kf_zm_jme_ef_eum_upvk_cesii
+	```
+
+	## Solution:
+	A quick look at the ciphertext it is clear this a simple substitution cipher. While one could certainly go about breaking this manually, there is no reason not to use the power of computers. I threw the ciphertext into [Decrypto](http://www.blisstonia.com/software/WebDecrypto/index.php) and a few seconds later I got the plaintext:
+	```
+	substitution ciphers were used in ancient times even though they are quite easily broken with just a pencil and paper, or more recently by common computerized tools. your key is: when_do_we_get_to_the_hard_stuff
+	```
+	Clearly the final key is:
+	```
+	when_do_we_get_to_the_hard_stuff
+	```

@@ -1,0 +1,20 @@
+//-; { "title": "Grep is Your Friend (40) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Grep is Your Friend (40)
+	---
+	## Challenge:
+	After plugging the robot into the computer, the robot asks for the name of a file containing the string `SECRET AUTH CODE`. You can find it by downloading [all of the files](assets/grep.tar).
+
+	## Solution:
+	Expanding the tar file we find 1000 files, too many to sort through by hand (not when there are better methods anyway). I simply ran the following command in the expanded files directory:
+	```shell
+	grep "SECRET AUTH CODE" *
+	```
+	This resulted in the following output:
+	```
+	fHYYpdrfeOCHyQicfe96xfw==:SECRET AUTH CODES
+	```
+	This means our final key is:
+	```
+	fHYYpdrfeOCHyQicfe96xfw==
+	```

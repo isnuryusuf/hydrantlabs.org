@@ -1,0 +1,37 @@
+//-; { "title": "PHP2 (85) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: PHP2 (85)
+	---
+	## Challenge:
+	We found a [simple web page](https://picoctf.com/problems/php2/) that seems to want us to authenticate, but we can't figure out how... can you?
+
+	## Solution:
+	Looking at the source of the linked webpage I found the following line:
+	```
+	<!-- source: index.phps -->
+	```
+	Navigating to the linked [page](https://picoctf.com/problems/php2/index.phps) I found the following source:
+	```php
+	<?
+	if(eregi("admin",$_GET[id])) {
+		echo("<p>not allowed!</p>");
+		exit();
+	}
+
+	$_GET[id] = urldecode($_GET[id]);
+	if($_GET[id] == "admin")
+	{
+		echo "<p>Access granted!</p>";
+		echo "<p>Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx </p>";
+	}
+	?>
+
+
+	<br><br>
+	Can you authenticate to this website?
+	<!-- source: index.phps -->
+	```
+	Looking at the source we can see that urldecode is called on the GET parameter `id`. This is clearly a mistake because PHP automatically calls urldecode on the GET parameter. So, to solve the problem by using [/problems/php2/index.php?id=%2561%2564%256d%2569%256e](https://picoctf.com/problems/php2/index.php?id=%2561%2564%256d%2569%256e) as a parameter. After visiting the page, we can see the following flag:
+	```
+	b4cc845aa05ed9b0ce823cb04f253e27
+	```

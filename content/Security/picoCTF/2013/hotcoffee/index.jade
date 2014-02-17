@@ -1,0 +1,52 @@
+//-; { "title": "hotcoffee (85) Solution picoCTF 2013" }
+:markdown
+  # picoCTF 2013: hotcoffee (85)
+  ---
+  ## Challenge:
+  This is a compiled Java class file. It looks like it will accept a password, but only one. Can you find the password and control the planet?
+
+  Download the class file [here](assets/Crackme.class).
+
+  ## Solution:
+  Decompiling the class file we get the following java:
+  ```java
+  import java.io.PrintStream;
+  import java.util.Scanner;
+
+  public class Crackme
+  {
+    public static void main(String[] paramArrayOfString)
+    {
+      System.out.println("Please enter the password:");
+      Scanner localScanner = new Scanner(System.in);
+      String str = localScanner.next();
+      if (str.equals("eupai1AhNu7aeTho")) {
+        System.out.println("Correct");
+        System.out.print("Your key is: ");
+        System.out.print("n");
+        System.out.print("0");
+        System.out.print("t");
+        System.out.print("h");
+        System.out.print("1");
+        System.out.print("n");
+        System.out.print("g");
+        System.out.print("_");
+        System.out.print("1");
+        System.out.print("s");
+        System.out.print("_");
+        System.out.print("s");
+        System.out.print("a");
+        System.out.print("f");
+        System.out.print("3");
+        System.out.print("\n");
+      }
+      else {
+        System.out.println("Wrong");
+      }
+    }
+  }
+  ```
+  Another simple problem, looking at the source we can get our flag:
+  ```
+  n0th1ng_1s_saf3
+  ```

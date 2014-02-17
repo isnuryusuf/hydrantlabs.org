@@ -1,0 +1,16 @@
+//-; { "title": "In Hex, No One Can Hear You Complain (90) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: In Hex, No One Can Hear You Complain (90)
+	---
+	## Challenge:
+	While flying through the outskirts of the Ripley system, you notice a distress signal from one of the outer moons. It appears a ship has crash-landed near a 16-sided pyramid. The lone survivor, a [docx file](assets/kane.docx), tells you that a malicious programmer has embedded an egg in his chest and he's afraid that it's going to hatch. He offers his assistance if you can help find the egg.
+
+	## Solution:
+	I took the lazy route and just unziped the docx file with the following command:
+	```shell
+	unzip kane.docx
+	```
+	Opening the file word/media/key.png we find our final key:
+	```
+	docx_why_not_docz
+	```

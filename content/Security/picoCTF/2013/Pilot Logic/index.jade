@@ -1,0 +1,64 @@
+//-; { "title": "Pilot Logic (75) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Pilot Logic (75)
+	---
+	## Challenge:
+	You've gotten a [partial dump](assets/pilot_image) of the disk from the hangar's machine, and you're pretty sure the pilot's password is cleverly hidden somewhere within it...
+
+	## Solution:
+	The first step was to determine what the image was:
+	```shell
+	file pilot_image
+	```
+	Which resulted in
+	```
+	pilot_image: Linux rev 1.0 ext2 filesystem data
+	```
+	I then mounted the file and created a tree directory listing (shortened where needed) with hidden files visible:
+	```
+	├── home
+	│   ├── bureaubot
+	│   │   ├── Desktop
+	│   │   ├── Documents
+	│   │   │   └── do_not_show_to_irs.txt
+	│   │   ├── Music
+	│   │   │   └── office_space.theme.mp3
+	│   │   ├── Pictures
+	│   │   └── Public
+	│   │       └── taxes.txt
+	│   ├── guardbot
+	│   │   ├── Desktop
+	│   │   ├── Documents
+	│   │   │   └── log
+	│   │   ├── Music
+	│   │   │   ├── No_Mercy_No_Respite.mp3
+	│   │   │   └── imperial_march
+	│   │   ├── Pictures
+	│   │   └── Public
+	│   ├── janitorbot
+	│   │   ├── Desktop
+	│   │   ├── Documents
+	│   │   ├── Music
+	│   │   ├── Pictures
+	│   │   │   └── cats
+	│   │   │       ├── cats_1.jpg
+	│   │   │       ├── ...........
+	│   │   │       └── cats_80.jpg
+	│   │   └── Public
+	│   └── pilotbot
+	│       ├── .secret
+	│       │   └── key
+	│       ├── Desktop
+	│       ├── Documents
+	│       │   └── flights.log
+	│       ├── Music
+	│       │   ├── highway_to_the_danger_zone
+	│       │   └── ride_of_the_valkyries
+	│       ├── Pictures
+	│       └── Public
+	└── lost+found
+	```
+	And, cleverly hidden in the `/home/pilotbot/.secret/key` file we find our key:
+	```
+	You can't take the sky from me
+	```

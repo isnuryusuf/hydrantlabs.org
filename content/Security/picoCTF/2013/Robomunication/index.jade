@@ -1,0 +1,20 @@
+//-; { "title": "Robomunication (80) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Robomunication (80)
+	---
+	## Challenge:
+	We recorded the following [communication](assets/robo.mp3) between two robots. Find out what evil things they are plotting, and recover their secret key!
+
+	## Solution:
+	Listening to the audio it's easy to tell it's a form of morse code. By transcribing each `beep` as a `.` and a `boop` as a `-` we can get the following more code:
+	```
+	.... . .-.. .-.. --- .-- .... .- - .. ... - .... . -.- . -.-- .. - .. - .. ... -... --- --- .--. -... . . .--.
+	```
+	Translating this results in:
+	```
+	HELLOWHATISTHEKEYITITISBOOPBEEP
+	```
+	This leaves us with our final key (case insensitive):
+	```
+	BeepBoop
+	```

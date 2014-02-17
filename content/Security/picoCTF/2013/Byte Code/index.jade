@@ -1,0 +1,44 @@
+//-; { "title": "Byte Code (70) Solution picoCTF 2013" }
+:markdown
+  # picoCTF 2013: Byte Code (70)
+  ---
+  ## Challenge:
+  You need to authenticate with the guard to gain access to the loading bay! Enter the root password from the vault application to retrieve the passkey! [This](assets/tmp_rAVOC.zip) class file is the executable for the vault application.
+
+  ## Solution:
+  After downloading the class file I decided to decompile it to a nice(ish) java file using [JD-GUI](http://jd.benow.ca/) and got the following java file:
+  ```java
+  import java.io.Console;
+  import java.io.PrintStream;
+
+  class Authenticator
+  {
+    public static char[] key;
+
+    public static void main(String[] paramArrayOfString)
+    {
+      key = new char[10];
+      key[0] = 'A';
+      key[1] = 'X';
+      key[2] = 'a';
+      key[3] = 'a';
+      key[4] = 'x';
+      key[5] = 'e';
+      key[6] = 'S';
+      key[7] = 'A';
+      key[8] = 'B';
+      key[9] = 'S';
+      Console localConsole = System.console();
+      String str = "";
+      while (!str.equals("ThisIsth3mag1calString4143"))
+        str = localConsole.readLine("Enter password:", new Object[0]);
+      for (int i = 0; i < key.length; i++)
+        System.out.print(key[i]);
+      System.out.println("");
+    }
+  }
+  ```
+  Here's what happens when the file is run: The user is prompted for a password until they enter `ThisIsth3mag1calString4143` which then causes the program to print the flag and exit. If we run the program (or you can probably tell by looking a the program), we get our final flag:
+  ```
+  AXaaxeSABS
+  ```

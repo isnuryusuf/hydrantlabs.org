@@ -1,0 +1,34 @@
+//-; { "title": "First Contact (40) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: First Contact (40)
+	---
+	## Challenge:
+	You notice that the indicator light near the robot’s antenna begins to blink. Perhaps the robot is connecting to a network? Using a wireless card and the network protocol analyzer Wireshark, you are able to create a PCAP file containing the packets sent over the network.
+
+	You suspect that the robot is communicating with the crashed ship. Your goal is to find the location of the ship by inspecting the network traffic.
+
+	You can perform the analysis online on [Cloudshark](http://www.cloudshark.org/captures/bc1c0a7fae2c) or you can download the [PCAP file](assets/first_contact.pcap).
+
+	## Solution:
+	Looking at packet data we see the following combined packet data (I've seperated it with newlines for readability):
+	```
+	ROBOT BOOTUP INITIALIZING..
+	SPACE SHIP READY..
+	BOOTUP BEGIN..
+	FIRMWARE STATUS.... COMPLETE..
+	LOCATION STATUS.... ERROR..
+	****BOOT ERROR****..
+	COULD NOT READ FROM DISK ID 0xEF982DA0..
+	INITIALIZE RECOVERY PROCEDURE 0xCD950422..
+	PROCEDURE 0xCD950422 STATUS.... COMPLETE..
+	AWAITING NEW LOCATION STATUS..
+	NEW LOCATION STATUS: 302..
+	NEW LOCATION COORDINATES: 37 14'06"N 115 48'40"W..
+	NEW LOCATION INFO: LOCKED..
+	NEW LOCATION UPDATE COMPLETE..
+	NEW LOCATION UPDATE SUCCESS..
+	```
+	A [simple google](http://lmgtfy.com/?q=37+14%2706%22N+115+48%2740%22W) search of `37 14'06"N 115 48'40"W` tells us these are the coordinates of Area 51. This leaves us with the key:
+	```
+	Area 51
+	```

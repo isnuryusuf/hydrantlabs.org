@@ -1,0 +1,14 @@
+//-; { "title": "Second Contact (85) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Second Contact (85)
+	---
+	## Challenge:
+	As you're bumming around the Kuiper Belt, you catch an [incoming transmission](assets/kuiper.pcap) from a distant source. They seem to be scanning the area, looking for something... Maybe you should try to find it first.
+
+	This trace file is also available in cloudshark [here](http://www.cloudshark.org/captures/f0741cdfee53)
+
+	## Solution:
+	Looking through the PCAP file the packet we're interested in is packet 609 with a GET request to bing.com for `/search?q=smashing+the+stack+for+fun+and+profit&form=MOZSBR&pc=MOZI`. This means the text the user was searching for found [here](http://insecure.org/stf/smashstack.html) (a wonderful read if you have time). At the top of the paper we find the author's name, our key:
+	```
+	Aleph One
+	```

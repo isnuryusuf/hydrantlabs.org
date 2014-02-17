@@ -1,0 +1,363 @@
+//-; { "title": "iOS OTA Update Protocol" }
+:markdown
+	iOS OTA Update Protocol
+	========================
+	Since the public release of iOS 5 OTA (Over the Air) Updates have been a reliable method for the easy distribution of iOS updates. I originally did an analysis of how these updates work before the public release, I've since updated that with new information, and clarified some of my original thoughts.
+
+	iOS devices periodically query a url for information about the latest updates. Almost all files and downloads relating to updates are served from [mesu.apple.com](http://mesu.apple.com/). iOS queries the following url: [/assets/com_apple_MobileAsset_SoftwareUpdateDocumentation/com_apple_MobileAsset_SoftwareUpdateDocumentation.xml](http://mesu.apple.com/assets/com_apple_MobileAsset_SoftwareUpdateDocumentation/com_apple_MobileAsset_SoftwareUpdateDocumentation.xml). The response is in the form of a Apple [plist](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man5/plist.5.html). Here's what a response might look like:
+	```xml
+	<plist version="1.0">
+		<dict>
+			<key>Assets</key>
+			<array>
+				<dict>
+					<key>Device</key>
+					<string>iPad</string>
+					<key>OSVersion</key>
+					<string>7.0</string>
+					<key>SUDocumentationID</key>
+					<string>iOS7GM</string>
+					<key>_CompressionAlgorithm</key>
+					<string>zip</string>
+					<key>_DownloadSize</key>
+					<integer>687867</integer>
+					<key>_MasteredVersion</key>
+					<string>380</string>
+					<key>_Measurement</key>
+					<data>z7s1R90oDGtSxYKDbZGbmvJfdMw=</data>
+					<key>_MeasurementAlgorithm</key>
+					<string>SHA-1</string>
+					<key>_UnarchivedSize</key>
+					<integer>1998379</integer>
+					<key>__AssetDefaultGarbageCollectionBehavior</key>
+					<string>NeverCollected</string>
+					<key>__BaseURL</key>
+					<string>http://appldnld.apple.com/iOS7/091-9234.20130918.Aaq21/</string>
+					<key>__RelativePath</key>
+					<string>com_apple_MobileAsset_SoftwareUpdateDocumentation/60c6fcb4324b3bc0b4d815df93ffa64c900ce863.zip</string>
+				</dict>
+			</array>
+			<key>Certificate</key>
+			<data>
+			MIID7TCCAtWgAwIBAgIBLTANBgkqhkiG9w0BAQUFADB5MQswCQYDVQQGEwJVUzETMBEGA1UEChMKQXBwbGUgSW5jLjEmMCQGA1UECxMdQXBwbGUgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxLTArBgNVBAMTJEFwcGxlIGlQaG9uZSBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTAeFw0xMTA3MTQyMjMyNDhaFw0xODA3MTQyMjMyNDhaMGYxCzAJBgNVBAYTAlVTMRMwEQYDVQQKEwpBcHBsZSBJbmMuMSEwHwYDVQQLExhBcHBsZSBpT1MgQXNzZXQgTWFuaWZlc3QxHzAdBgNVBAMTFkFzc2V0IE1hbmlmZXN0IFNpZ25pbmcwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC1y4D4VYBPHLwnHk1qfi1F49E3Ml675ElYYAFghqpAiKOqeagLVZU8zKuPw650NHACvNJbjKBjMsWdWaFMj/7c2TB5IkJwi61Y6B+uVK78W9u9I/hFAK0pWcM9Y5KbKMvz4wEwt64EXfS8eVBRmqh/29ygxN9NtBbHEiGiGQ8vxIV3U6FomNdmxKPM7VZmsyFIxQ5HsxgHb0skxlDIdePtYsHLmpK9PX43K3sBT3lHN0Uxtit8HTrdwiNq13cI0TINT+lsbXKLp3/gPJVpfxkQ3MTt40KG/DTMsqKOygDombsFSqA+RPSv68YtJ/kAaGaoH6gZfRrwX7GJozzQ8KTZAgMBAAGjgZIwgY8wDgYDVR0PAQH/BAQDAgeAMAkGA1Ud EwQCMAAwHQYDVR0OBBYEFGNQxP6y1Ao4Hrhid6BcMLwcrB3BMDgGA1UdHwQxMC8wLaAroCmGJ2h0dHA6Ly93d3cuYXBwbGUuY29tL2FwcGxlY2EvaXBob25lLmNybDAZBgNVHSABAf8EDzANMAsGCSqGSIb3Y2QFCDANBgkqhkiG9w0BAQUFAAOCAQEAn6Cj4XjlScRIh1wPF8BLCz/dl6CskbTsJXz24tCDm3gcvb1Ovc+sBeg1JyvHiy2C4NxEGDYsVYHvUbucXrGdul6kKauOYcEzpogk56BIRenKHivAqQQtNJpVmqrElgqDntI/az2Gsw32TLWyDXVw8rWivchZE+VOv1mT4a7LHsdxMWbEOIrkvkZUOoxZlQhjPCc22mp0Yy5rwcf+3/IwJGOhJSXOVrcxuOwmweNrK1Eajn+HS2IlnMBwQDkH/d74KUXGvuNX0LsXv9cCQMB8tcjFlr1u+SzoXCHD1SJkU4ex3auhnukYSoiag78twmDRk726aYmxNIfYYpDs0hS7Mw==
+			</data>
+			<key>FormatVersion</key>
+			<integer>1</integer>
+			<key>Signature</key>
+			<data>
+			X2lhRFJTVAcNkNpYEmGZzf+SJ5D7hRck3KbvVWJmzPlRVk4hfW1lc5nlyGMXKAzFz8YwDuaDL9au2WkuE8H8Z3xpkg1s64TRtpMwIPxjZQ+qvAseQ4F/3LymjDZaq7/qRad+fi/eJ577Fj6Rm9krvxqrDXGkwkCcFuLk/wGzzsYW/Y2/cRa04qTBz2gVlVlFP9QFCXEM8rXSkSlZ39XFLFHQyHmJNLYcCeTy6y0qaVWPrm6VI1muZqnw4+rEIwZk5HRIWfwt8lYHFjaBO+47eRiwJBfPCppKmBedW0lpUXaxmwD61CuKDE+zVTJKrQumGGkkSEH9j13jJWlHnOTWew==
+			</data>
+			<key>SigningKey</key>
+			<string>AssetManifestSigning</string>
+		</dict>
+	</plist>
+	```
+	This file contains references to the Documentation regarding each update. The file containing the actual updates list is downloaded later. The analysis of the individual keys:
+
+	The `Certificate` key seems to be a exact copy of the certificate that is located on the FileSystem indicated by `Signing Key`.
+
+	The `FormatVersion` key indicates the how the plist is formatted. Since iOS 5 the format has not changed, it remains FormatVersion "1".
+
+	The `Signature` key contains a signature of the current file.
+
+	The `SigningKey` key indicates which key should be used to verify the updates against. This is used in conjunction with the Signature key.
+
+	The `Assets` key contains an array of the availible updates. Each object within the array contains the following keys:
+
+	The `Device` key contains one of the following values (at this time): `iPhone`, `iPod`, `iPad`.
+
+	The `OSVersion` key is the version of the OS the update contains. For instance: `5.1.1` or `6.1.3`.
+
+	The `SUDocumentationID` key is the internal name used to identify the update. For instance, iOS 6.1.3 is identified by `613GM`.
+
+	The `_CompressionAlgorithm` key contains the format used to compress the OTA update. In all cases I've seen, this has always been `zip`.
+
+	The `_DownloadSize` key contains the size of the documentation expressed in bytes.
+
+	The `_MasteredVersion` key seems to have no relevance and internal uses only.
+
+	The `_MeasurementAlgorithm` key contains the algorithm used to verify the integrity of the file. In all cases I've seen this has been `SHA-1`
+
+	The `_Measurement` key is the value of the result of the `_MeasurementAlgorithm` applied to the download.
+
+	The `_UnarchivedSize` key contains the size of the download once the download has been unarchived. This is used to make sure there is enough space on the File System.
+
+	The `__AssetDefaultGarbageCollectionBehavior` key seems to indicate that assets when downloaded to the File System they can be removed (Garbage Collected) if free space is needed. This key dictates that the files are too important to be deleted. This is also marked for the actual OTA updates.
+
+	The `__BaseURL` and `__RelativePath` keys are concatenated together to form the download for the actual URL.
+
+	So, in order to analyze the Documentation files, let's pick one. I've chosen the iOS 6.1.3 update which can be downloaded [here](http://appldnld.apple.com/iOS6.1/Documentation/091-1498.20130319.Cfrt5/com_apple_MobileAsset_SoftwareUpdateDocumentation/c02d9a5918e44092e34a94909736cd04eea8480e.zip).
+
+	Once the file has been unzipped you'll find a folder structure formatted like this:
+	```
+	AssetData/
+	Info.plist
+	version.plist
+	```
+
+	The `version.plist` contains some version information that seems to only have internal uses.
+
+	The `Info.plist` looks like the following:
+	```xml
+	<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+	<plist version="1.0">
+	<dict>
+		<key>CFBundleIdentifier</key>
+		<string>com.apple.MobileAsset.SoftwareUpdateDocumentation</string>
+		<key>CFBundleName</key>
+		<string>SoftwareUpdateDocumentation</string>
+		<key>CFBundleDevelopmentRegion</key>
+		<string>English</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6</string>
+		<key>CFBundleShortVersionString</key>
+		<string>1.0.0</string>
+		<key>MobileAssetProperties</key>
+		<dict>
+			<key>Device</key>
+			<string>iPad</string>
+			<key>__AssetDefaultGarbageCollectionBehavior</key>
+			<string>NeverCollected</string>
+			<key>OSVersion</key>
+			<string>6.1.3</string>
+			<key>SUDocumentationID</key>
+			<string>GM</string>
+		</dict>
+	</dict>
+	</plist>
+	```
+
+	This seems to also not be used similar to `version.plist` but it also contains a few relevant keys. These keys seem to have the option to be different in value than the keys indicated above in the `com_apple_MobileAsset_SoftwareUpdateDocumentation.xml` file, but have the same core purpose.
+
+	The `Assets` has a series of subdirectories organized in Apple's favorite format, `lproj` files (Language Projects). At the time of this writing, the following languages are included in each OTA update documentation file:
+
+	```
+	ar: Arabic
+	ca: Catalan
+	cs: Czech
+	da: German
+	de: Danish
+	el: Greek
+	en_GB: English (Great Britian)
+	en: English
+	es: Spanish
+	fi: Finnish
+	fr: French
+	he: Hebrew
+	hr: Croatian
+	hu: Hungarian
+	id: Indonesian
+	it: Italian
+	ja: Japanese
+	ko: Korean
+	ms: Malay
+	nb: Norwegian
+	nl: Dutch
+	pl: Polish
+	pt_PT: Portuguese (Portugal)
+	pt: Portuguese
+	ro: Romanian
+	ru: Russian
+	sk: Slovak
+	sv: Swedish
+	th: Thai
+	tr: Turkish
+	uk: Ukrainian
+	vi: Vietnamese
+	zh_CN: Chinese (Simplified Han)
+	zh_TW: Chinese (Traditional Han)
+	```
+
+	Inside each subdirectory the following files exist:
+
+	```
+	documentation.strings
+	License.html
+	ReadMe.html
+	ReadMeSummary.html
+	```
+
+	The `documentation.strings` is a binary plist with a single key, `HumanReadableUpdateName`, Which is the name shown as the title in the update window.
+
+	The `License.html` is, as you would expect, the License for the update.
+
+	The `ReadMe.html` is the information shown when the `Learn More`.
+
+	The `ReadMeSummary.html` is the information shown on the update screen before the `Learn More` button is pressed.
+
+	In the `en` subdirectory, a `locversion.plist` exists. It seems to be a file containing information about the lproj.
+
+	When the `Install Now` button is pressed, the iOS device queries the following url [/assets/com_apple_MobileAsset_SoftwareUpdate/com_apple_MobileAsset_SoftwareUpdate.xml](http://mesu.apple.com/assets/com_apple_MobileAsset_SoftwareUpdate/com_apple_MobileAsset_SoftwareUpdate.xml). Again on [mesu.apple.com](http://mesu.apple.com). 
+
+	The file is formatted as following:
+
+	```xml
+	<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+	<plist version="1.0">
+	<dict>
+		<key>Assets</key>
+		<array>
+			<dict>
+				<key>Build</key>
+				<string>11A465</string>
+				<key>InstallationSize</key>
+				<string>940237358</string>
+				<key>MinimumSystemPartition</key>
+				<integer>1736</integer>
+				<key>OSVersion</key>
+				<string>7.0</string>
+				<key>PrerequisiteBuild</key>
+				<string>10B329</string>
+				<key>PrerequisiteOSVersion</key>
+				<string>6.1.3</string>
+				<key>SUDocumentationID</key>
+				<string>iOS7GM</string>
+				<key>SUProductSystemName</key>
+				<string>iOS</string>
+				<key>SUPublisher</key>
+				<string>Apple Inc.</string>
+				<key>SupportedDevices</key>
+				<array>
+					<string>iPad3,6</string>
+				</array>
+				<key>SystemPartitionPadding</key>
+				<dict>
+					<key>128</key>
+					<integer>1280</integer>
+					<key>16</key>
+					<integer>160</integer>
+					<key>32</key>
+					<integer>320</integer>
+					<key>64</key>
+					<integer>640</integer>
+				</dict>
+				<key>_CompressionAlgorithm</key>
+				<string>zip</string>
+				<key>_DownloadSize</key>
+				<integer>980840934</integer>
+				<key>_Measurement</key>
+				<data>
+				ZijuuOFczKS289+I8ZDNO14qQRI=
+				</data>
+				<key>_MeasurementAlgorithm</key>
+				<string>SHA-1</string>
+				<key>_UnarchivedSize</key>
+				<integer>1171208881</integer>
+				<key>__AssetDefaultGarbageCollectionBehavior</key>
+				<string>NeverCollected</string>
+				<key>__BaseURL</key>
+				<string>http://appldnld.apple.com/iOS7/091-9440.20130918.Xxder/</string>
+				<key>__CanUseLocalCacheServer</key>
+				<true/>
+				<key>__RelativePath</key>
+				<string>com_apple_MobileAsset_SoftwareUpdate/64dbea1defd7cfa1f09a153d55ef0864e1e8648f.zip</string>
+			</dict>
+		</array>
+		<key>Certificate</key>
+		<data>
+		MIID7TCCAtWgAwIBAgIBLTANBgkqhkiG9w0BAQUFADB5MQswCQYDVQQGEwJVUzETMBEGA1UEChMKQXBwbGUgSW5jLjEmMCQGA1UECxMdQXBwbGUgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxLTArBgNVBAMTJEFwcGxlIGlQaG9uZSBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTAeFw0xMTA3MTQyMjMyNDhaFw0xODA3MTQyMjMyNDhaMGYxCzAJBgNVBAYTAlVTMRMwEQYDVQQKEwpBcHBsZSBJbmMuMSEwHwYDVQQLExhBcHBsZSBpT1MgQXNzZXQgTWFuaWZlc3QxHzAdBgNVBAMTFkFzc2V0IE1hbmlmZXN0IFNpZ25pbmcwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC1y4D4VYBPHLwnHk1qfi1F49E3Ml675ElYYAFghqpAiKOqeagLVZU8zKuPw650NHACvNJbjKBjMsWdWaFMj/7c2TB5IkJwi61Y6B+uVK78W9u9I/hFAK0pWcM9Y5KbKMvz4wEwt64EXfS8eVBRmqh/29ygxN9NtBbHEiGiGQ8vxIV3U6FomNdmxKPM7VZmsyFIxQ5HsxgHb0skxlDIdePtYsHLmpK9PX43K3sBT3lHN0Uxtit8HTrdwiNq13cI0TINT+lsbXKLp3/gPJVpfxkQ3MTt40KG/DTMsqKOygDombsFSqA+RPSv68YtJ/kAaGaoH6gZfRrwX7GJozzQ8KTZAgMBAAGjgZIwgY8wDgYDVR0PAQH/BAQDAgeAMAkGA1UdEwQCMAAwHQYDVR0OBBYEFGNQxP6y1Ao4Hrhid6BcMLwcrB3BMDgGA1UdHwQxMC8wLaAroCmGJ2h0dHA6Ly93d3cuYXBwbGUuY29tL2FwcGxlY2EvaXBob25lLmNybDAZBgNVHSABAf8EDzANMAsGCSqGSIb3Y2QFCDANBgkqhkiG9w0BAQUFAAOCAQEAn6Cj4XjlScRIh1wPF8BLCz/dl6CskbTsJXz24tCDm3gcvb1Ovc+sBeg1JyvHiy2C4NxEGDYsVYHvUbucXrGdul6kKauOYcEzpogk56BIRenKHivAqQQtNJpVmqrElgqDntI/az2Gsw32TLWyDXVw8rWivchZE+VOv1mT4a7LHsdxMWbEOIrkvkZUOoxZlQhjPCc22mp0Yy5rwcf+3/IwJGOhJSXOVrcxuOwmweNrK1Eajn+HS2IlnMBwQDkH/d74KUXGvuNX0LsXv9cCQMB8tcjFlr1u+SzoXCHD1SJkU4ex3auhnukYSoiag78twmDRk726aYmxNIfYYpDs0hS7Mw==
+		</data>
+		<key>FormatVersion</key>
+		<string>1</string>
+		<key>Signature</key>
+		<data>
+		fIn1ES2ci3O9w9zT3qWSQRdM5m3SFXhfDqRBTBOIKh7ghGc/XyebUkC387p1M2voj5i1KETHLfzJE8jW5SErqJwkwfFAR2iomSczZZnYYO7WQfkgZ32bUehjwLiXtulofEsCl98dMmV8IrPUeWNB23dqNM0HEH8IQIgszNdFcBGbF+ZaCBYTfYPIlTL7pRX4XVSBf/0Nlm9jk9T3WdDbIp3vfpoptiplMSvaK7hUaigB/X69U4RQJ8pp+LtjD7jzykvIolv/YUrKiDRiwLstvjIR1EOVtMcywMJJeB+oZfxIaQCWDplv+TU5nAHNud/bBlVeXq6io91IQmblQAC1fQ==
+		</data>
+		<key>SigningKey</key>
+		<string>AssetManifestSigning</string>
+	</dict>
+	</plist>
+	```
+
+	`Certificate` is the same certificate presented in the earlier file.
+
+	`Signature` is, as expected, different than the Signature presented in the earlier file.
+
+	`Build` is the build id of the install.
+
+	`InstallationSize` is the size of the install after installed. This is different from the `_UnarchivedSize`, which is the size of the download when uncompressed, but not installed.
+
+	`MinimumSystemPartition` is the space required on the system partition. iOS is divided into two partitions, the user partition located at `/var/mobile` and the system partition at `/`.
+
+	`OSVersion` is the new version of the OS that will be installed by the update.
+
+	`PrerequisiteBuild` and `PrerequisiteOSVersion` are, as expected, the required OS information for the update to install.
+
+	`SUDocumentationID`, `SUProductSystemName` and `SUPublisher` are an interesting keys, The use of each key is pretty self explanatory. The SU in each stands for Software Update.
+
+	`SupportedDevices` is an array of devices that the update supports. The key is unique to the update itself and not included in the documentation as documentation is only specific to a device, not a model of each device.
+
+	`SystemPartitionPadding` seems to indicate how the system partition is padded.
+
+	`__CanUseLocalCacheServer` seems to indicate that a update could be installed from a local cache, similar to the Mac OS X update.
+
+	`_CompressionAlgorithm`, `_DownloadSize`, `_Measurement`, `_MeasurementAlgorithm`, `_UnarchivedSize`, `__AssetDefaultGarbageCollectionBehavior`, `__BaseURL`, and `__RelativePath` serve the same purpose in the previous file.
+
+	The download, found [here](http://appldnld.apple.com/iOS7/091-9440.20130918.Xxder/com_apple_MobileAsset_SoftwareUpdate/64dbea1defd7cfa1f09a153d55ef0864e1e8648f.zip), when unarchived contains the following file structure:
+	```
+	Assets/
+		boot/
+			BuildManifest.plist
+			Firmware/
+				all_flash/
+					all_flash.p103ap.production/
+						DeviceTree.p103ap.img3
+						iBoot.p103ap.RELEASE.img3
+						LLB.p103ap.RELEASE.img3
+						manifest
+				dfu/
+					iBEC.p103ap.RELEASE.dfu
+					iBSS.p103ap.RELEASE.dfu
+				usr/
+					local/
+						standalone/
+			kernelcache.release.p103
+		Info.plist
+		payload/
+			added/
+			patches/
+			replace/
+			resequence/
+		payload.bom
+		payload.bom.signature
+		post.bom
+		pre.bom
+	Info.plist
+	```
+
+	`Info.plist` contains similar information as provided in the above plist.
+
+	`AssetData/Info.plist` contains some pretty standard iOS firmware files and their locations (`/boot`). More info on those files can be found on [theiphonewiki.com](http://theiphonewiki.com/).
+
+	The more interesting files are the `.bom` files. They are files in the Apple BOM format. BOM stands for `Bill of Materials`, more information can be found [here](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man5/bom.5.html). 
+
+	`pre.bom` is used to confirm that the OS has not been modified at the start. This is waht prevents a jailbroken device from installing the OTA update.
+
+	`post.bom` is used to confirm the update installed correctly. I don't know what happens if this test fails.
+
+	`payload.bom` confirms the files within the `payload` directory have not been modified.
+
+	`payload.bom.signature` is the signature of `payload.bom` signed with the key specified in `Certificate` earlier. This, in combination with the `Signature` and `Measurement` keys are the only validation provided to certify an OTA update is from apple.
+
+	The `payload` directory is laid out in the following format:
+
+	```
+	added
+	patches
+	replace
+	resequence
+	```
+
+	Within each directory the files are laid just as they appear in the filesystem. So, if I wanted to create `helloworld.txt` in the `/var/mobile` directory, I would create the file in `payload/added/var/mobile/helloworld.txt`.
+
+	`added` is, as you would expect, raw files that are being added.
+
+	`patches` are `bspatch` files. More information about `bspatch` files can be found [here](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/bspatch.1.html).
+
+	`replace` are files to be replaced, instead of patched. In all cases I've seen the only file in here is `/private/etc/fstab`.
+
+	`resequence` is a new type of folder that only appeared in the new `iOS 7` updates. I have been unable to determine the file format used. If you have any idea, please feel free to open an issue on this websites github project [here](https://github.com/innoying/hydrantlabs.com).
+
+	This concludes the information I've uncovered about iOS OTA updates. If there is anything I missed or got incorrectly (there very well may be, I did this from memory) please open a github issue [here](https://github.com/innoying/hydrantlabs.com).

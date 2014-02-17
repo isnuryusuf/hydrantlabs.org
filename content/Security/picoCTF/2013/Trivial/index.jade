@@ -1,0 +1,84 @@
+//-; { "title": "Trivial (45) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Trivial (45)
+	---
+	## Challenge:
+	An unlocked terminal is displaying the following:
+	```
+	Encryption complete, ENC(???,T0pS3cre7key) = Bot kmws mikferuigmzf rmfrxrwqe abs perudsf! Nvm kda ut ab8bv_w4ue0_ab8v_DDU
+	```
+	You poke around and find this interesting [file](assets/encrypt.py).
+
+	## Solution:
+	Examining the encryption python script I wrote a decryption node.js script:
+	```js
+	// Get the key
+	var key = process.argv[2];
+
+	// Get the cipherText
+	var cipherText = process.argv[3].split("");
+
+	// From encrypt.py
+	var keyChars = "0123456789abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	// Final plainText
+	var plainText = "";
+
+	// Fix mod
+	Number.prototype.mod = function(n) { return ((this%n)+n)%n; };
+
+	// Get the ord for the char
+	function ord(char) { return char.charCodeAt(0); }
+
+	// If a char is in the range between lower and upper chars
+	function charInRange(char, lower, upper) { return (keyChars.indexOf(char) >= keyChars.indexOf(lower)) && (keyChars.indexOf(char) <= keyChars.indexOf(upper)); }
+
+	// Loop each cipherText char
+	for (var i in cipherText) {
+
+		// Calculate the rotate amount
+		var rotate_amount = keyChars.indexOf(key[i%key.length]);
+
+		// Get the charCode
+		var charCode = ord(cipherText[i]);
+
+		// Lowercase
+		if (charInRange(cipherText[i], "a", "z")) {
+
+			// Update
+			charCode = ord("a") + (charCode - ord("a") - rotate_amount).mod(26);
+
+		// Uppercase
+		} else if (charInRange(cipherText[i], "A", "Z")) {
+
+			// Update
+			charCode = ord("A") + (charCode - ord("A") - rotate_amount).mod(26);
+
+		// Numbers
+		} else if (charInRange(cipherText[i], "0", "9")) {
+
+			// Update
+			charCode = ord("0") + (((charCode - ord("0") - rotate_amount).mod(10)));
+
+		}
+
+		// Add the plain text
+		plainText += String.fromCharCode(charCode);
+
+	}
+
+	// Print the plain text
+	console.log(plainText);
+	```
+	Run via the following:
+	```shell
+	node decrypt.js "T0pS3cre7key" "Bot kmws mikferuigmzf rmfrxrwqe abs perudsf\! Nvm kda ut ab8bv_w4ue0_ab8v_DDU"
+	```
+	This results in our output:
+	```
+	You have successfully decrypted the message! The key is th4ts_x0rs3_th4n_DES
+	```
+	This means our final key is:
+	```
+	th4ts_x0rs3_th4n_DES
+	```

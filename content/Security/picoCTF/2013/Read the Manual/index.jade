@@ -1,0 +1,47 @@
+//-; { "title": "Read the Manual (30) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Read the Manual (30)
+	---
+	## Challenge:
+	On the back of the broken panel you see a recovery [manual](assets/encrypted.txt). You need to find the emergency repair key in order to put the robot into `autoboot` mode, but it appears to be ciphered using a Caesar cipher.
+
+	## Solution:
+	A quick look at the cipher text reveals the hint about a caesar cipher is correct. I wrote a quick node.js script to output each possible output:
+	```js
+	// Need fs module to r/w files
+	var fs = require("fs");
+
+	// Read cipherText
+	var cipherText = fs.readFileSync("encrypted.txt") + "";
+
+	// Loop each 26 possible shifts
+	for (var shift = 0; shift < 26; shift++) {
+
+		// Create new shiftedText string
+		var shiftedText = "";
+
+		// Loop each character in the string
+		for (var i = 0; i < cipherText.length; i++) {
+
+			// Get the character to process
+			var c = cipherText.charCodeAt(i);
+
+			if      (c >= 65 && c <=  90) shiftedText += String.fromCharCode((c - 65 + shift) % 26 + 65);  // Uppercase
+			else if (c >= 97 && c <= 122) shiftedText += String.fromCharCode((c - 97 + shift) % 26 + 97);  // Lowercase
+			else                          shiftedText += cipherText.charAt(i);  // Copy
+
+		}
+
+		// Write the output
+		fs.writeFileSync("ROT" + shift + ".txt", shiftedText);
+
+	}
+	```
+	Examining the results we find the file [ROT23.txt](assets/ROT23.txt) is a working decryption. Looking throught the file we see the following on line 3:
+	```
+	IMPORTANT: To enter automatic recovery mode, enter the following recovery key 'ttdxsjsyxitr'
+	```
+	This leads us to the final key:
+	```
+	ttdxsjsyxitr
+	```

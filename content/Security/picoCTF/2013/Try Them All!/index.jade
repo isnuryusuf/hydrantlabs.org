@@ -1,0 +1,42 @@
+//-; { "title": "Try Them All! (45) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Try Them All! (45)
+	---
+	## Challenge:
+	You have found a passwd file containing salted passwords. An unprotected configuration file has revealed a salt of 3367. The hashed password for the 'admin' user appears to be d6f73940a13ac6ebf07f3abbfc715fef, try to brute force this password.
+
+	## Solution:
+	I wrote a quick node.js script to just use the default word dictionary, add the salt and calculate the md5sum. If the result matches the desired word, it prints the result. Here it is:
+	```js
+	// Use fs for reading the file list
+	var fs = require("fs");
+
+	// Use crypto for md5
+	var crypto = require('crypto');
+
+	// Read the words
+	var words = (fs.readFileSync("/usr/share/dict/words") + "").split("\n");
+
+	// Loop each word
+	for (i in words) {
+
+		// Get the word
+		var word = words[i];
+
+		// Get the md5 of that string plus the salt
+		var md5sum = crypto.createHash("md5").update(word + "3367").digest("hex");
+
+		// If the md5 matches
+		if (md5sum === "d6f73940a13ac6ebf07f3abbfc715fef") {
+
+			// Print the word that matches
+			console.log(word);
+
+		}
+
+	}
+	```
+	This results in the matching word and subsequently the key:
+	```
+	comb
+	```

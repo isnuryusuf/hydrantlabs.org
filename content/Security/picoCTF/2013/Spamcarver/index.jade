@@ -1,0 +1,16 @@
+//-; { "title": "Spamcarver (70) Solution picoCTF 2013" }
+:markdown
+	# picoCTF 2013: Spamcarver (70)
+	---
+	## Challenge:
+	While exploring an alien tomb, you find an [ancient jpg of an ancient can of SPAM](assets/spamcarver.jpg). It seems valueless, but the guardbots really want it back, so perhaps there's something more here than meets the eye. Maybe it's cursed, or hexed, if you will?
+
+	## Solution:
+	I happened to get rather lucky when I acted on a hunch on this challenge. I simply ran the following command:
+	```shell
+	unzip spamcarver.jpg
+	```
+	Which successfully extracted a file `        ` which I have renamed to a nicer name [key.jpg](assets/key.jpg). Viewing this file we get our final solution:
+	```
+	7adf6f07e0810003c585a7be97868a90
+	```
