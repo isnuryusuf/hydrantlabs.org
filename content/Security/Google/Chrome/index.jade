@@ -3,7 +3,7 @@
 	# Exploiting the Google Chrome Developer Tools
 	Recently, there was a front page Hacker News post asking [How does Facebook disable Developer Tools?](https://news.ycombinator.com/item?id=7222129) which linked a Stack Overflow question [here](http://stackoverflow.com/questions/21692646/how-does-facebook-disable-developer-tools). With the first part of the vulnerabilities I discovered being widely availible online I figured now was a good of time as any to write a post the rest of them.
 
-	On a quick note before I get into the post, I'm looking for a Software Development or Information Security Internship/Mentorship in the Minneapolis/Twin Cities area. If you happen to have a position availible, or know someone who does, please check out my [LinkedIn]() and if you feel I would be a good fit, contact me [here]().
+	On a quick note before I get into the post, I'm looking for a Software Development or Information Security Internship/Mentorship in the Minneapolis/Twin Cities area. If you happen to have a position available, or know someone who does, please check out my [LinkedIn]() and if you feel I would be a good fit, contact me [here]().
 
 	The vulnerabilities disclosed in the post have the following capabilities:
 	* Detect the opening and executing of commands in the console. (Unpatched)
@@ -13,14 +13,14 @@
 	* Other unexplored potential vulnerabilities that are children of these (Unpatched)
 	* Use these vulnerabilities to execute arbitrary scripts on webpages that can be framed (Patched)
 
-	To be clear, I have responsibly disclosed these vulnerabilities almost a full year ago and unless otherwise noted they remain unpatched. By Google's own [responsible disclose guidelines](http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html) I have given many many months past the 60 day grace period for the issues to be fixed. You can find a full timeline of the issues reported in this post at the bottom. No reward was presented for the findings. I want to note that at the time of reporting the issues, I was only a Junior in high school and did not a have a large amount of experiance reporting vulnerabilities. I have since gained more experiance and looking back there are things I would have done differently, however I still believe that communication from Google could have been better overall. 
+	To be clear, I have responsibly disclosed these vulnerabilities almost a full year ago and unless otherwise noted they remain unpatched. By Google's own [responsible disclose guidelines](http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html) I have given many many months past the 60 day grace period for the issues to be fixed. You can find a full timeline of the issues reported in this post at the bottom. No reward was presented for the findings. I want to note that at the time of reporting the issues, I was only a Junior in high school and did not a have a large amount of experience reporting vulnerabilities. I have since gained more experience and looking back there are things I would have done differently, however I still believe that communication from Google could have been better overall. 
 
 	The post is split up into the following sections, feel free to skip around, however it will make the most sense when read from top to bottom:
 	* [Introduction](#Introduction)
 	* [Vulnerability I](#Vulnerability_I)
 	* [Blocking Console Access (Simple)](#Blocking_Console_Access_Simple)
 	* [Introduction Part II](#Introduction_Part_II)
-	* [Vulnernability II](#Vulnerability_II)
+	* [Vulnerability II](#Vulnerability_II)
 	* [Blocking Console Access (Advanced)](#Blocking_Console_Access_Advanced)
 	* [Console Logging](#Console_Logging)
 	* [Console Censorship](#Console_Censorship)
@@ -44,7 +44,7 @@
 	// *snip*
 	expression = prefix + "\n" + expression + "\n" + suffix;
 	```
-	This function is one of many that are run when code is evaluated from the devtools console. This function is rather imporatant because it is where devtools specific functions like `copy('String to Clip Board')` and `clear()` are added. These functions are members of the class `CommandLineAPI` of which `console._commandLineAPI` is an instance of. 
+	This function is one of many that are run when code is evaluated from the devtools console. This function is rather important because it is where devtools specific functions like `copy('String to Clip Board')` and `clear()` are added. These functions are members of the class `CommandLineAPI` of which `console._commandLineAPI` is an instance of. 
 
 	## <a name="Vulnerability_I"></a>Vulnerability I
 
@@ -56,7 +56,7 @@
 		}
 	});
 	```
-	You'll notice that if you view a page with this script (demo [here]()) as you are typing the script will report a command is being run before you press enter. This is becuase every few keypresses the devtools will attempt to lookup code completion suggustions, which qualify as their own command.
+	You'll notice that if you view a page with this script (demo [here]()) as you are typing the script will report a command is being run before you press enter. This is because every few keypresses the devtools will attempt to lookup code completion suggestions, which qualify as their own command.
 
 	## <a name="Blocking_Console_Access_Simple"></a>Blocking Console Access (Simple)
 	So detecting when the console is loaded and when commands are run is fun, but let's see if we can try to disable commands. This is the same way FaceBook has created the same feature to warn users of potential attacks:
@@ -67,7 +67,7 @@
 		}
 	});
 	```
-	As you can see simply throwing an error when the `_commandLineAPI` is retrieved will prevent a command from being run or suggustions from working successfully. 
+	As you can see simply throwing an error when the `_commandLineAPI` is retrieved will prevent a command from being run or suggestions from working successfully. 
 
 	## <a name="Introduction_Part_II"></a>Introduction Part II
 	Before I can continue into a more advanced blocking of console access and other related exploits we have to first talk about JavaScript again. When a JavaScript function is created a scope for the function is created with a local variable `arguments` that contains an array of the arguments passed to the function. This has a few uses as one can imagine:
@@ -132,7 +132,7 @@
 
 	## <a name="Vulnerability_II"></a>Vulnerability II
 
-	Using the above mentioned `arguments.callee.caller` functionality is where our second (and more valuable) vulnerability comes in. When a function is executed in the standard context with no parent functions `arguments.callee.caller` will simply be `null`. However, when a script is executed from the devtools console, instead of being null (as one would expect) it is instead the function `_evaluateOn` first mentioned at the begining of the post. For example running the following code in the console will dump the source for the `_evaluateOn` function:
+	Using the above mentioned `arguments.callee.caller` functionality is where our second (and more valuable) vulnerability comes in. When a function is executed in the standard context with no parent functions `arguments.callee.caller` will simply be `null`. However, when a script is executed from the devtools console, instead of being null (as one would expect) it is instead the function `_evaluateOn` first mentioned at the beginning of the post. For example running the following code in the console will dump the source for the `_evaluateOn` function:
 	```javascript
 	(function () {
 		return arguments.callee.caller;
@@ -140,7 +140,7 @@
 	```
 	I can already hear the questions again:
 
-	> I guess this is bad, but what does it have to do with the first vulnerabilty and what can I do with it?
+	> I guess this is bad, but what does it have to do with the first vulnerability and what can I do with it?
 
 	Let's start with the relationship with the first vulnerability. In this case, getting a victim to copy and paste code such as the above is going to be difficult at best. What happens if we were to combine this with the initial vulnerability? We get the following:
 	```javascript
@@ -246,7 +246,7 @@
 	```
 
 	## <a name="Console_Logging"></a>Console Logging
-	Okay, you can probably guess that the point of the above exercise was not to remove the red text. Let's have some more fun, let's write a script that allows the console to act exactly as expected, but log all commands run and their results. This could easily be sent to a server for logging, but I'll leave that implementation up to you, the reader. One quick note, this implementation ignores suggustions, this is because suggustions are implemented as such that they are only a result of a array, and cannot be easily logged. So, onto the proof of concept:
+	Okay, you can probably guess that the point of the above exercise was not to remove the red text. Let's have some more fun, let's write a script that allows the console to act exactly as expected, but log all commands run and their results. This could easily be sent to a server for logging, but I'll leave that implementation up to you, the reader. One quick note, this implementation ignores suggestions, this is because suggestions are implemented as such that they are only a result of a array, and cannot be easily logged. So, onto the proof of concept:
 	```javascript
 	// First run
 	var run = false;
@@ -354,7 +354,7 @@
 	});
 	```
 	## <a name="UXSS"></a>Universal Cross Site Scripting
-	Let's get into the one vulnerability that has been patched. This vulnerability allowed a malicious website to inject arbitrary scripts, html, etc to any website that could be framed via an iframe with some user interaction. It works pretty simply, when a user inspects an element, it is added to a history array. A user can access it via `console.$0`, but unfortuantly cannot access this if it is executed from a different domain. For the exploit to be viable: A user must right click a iframe element, then open the console and begin to type a command. 
+	Let's get into the one vulnerability that has been patched. This vulnerability allowed a malicious website to inject arbitrary scripts, html, etc to any website that could be framed via an iframe with some user interaction. It works pretty simply, when a user inspects an element, it is added to a history array. A user can access it via `console.$0`, but unfortunately cannot access this if it is executed from a different domain. For the exploit to be viable: A user must right click a iframe element, then open the console and begin to type a command. 
 
 	While this is clearly a convoluted path, there are many ways to have a user complete these actions. For example, I have hypothesized a following game:
 	```
@@ -364,7 +364,7 @@
 	To repair a part, the user must right click and inspect the individual element to fix it.
 	Once the element is being inspected they can fix it by typing "fix" in the Console.
 	```
-	Of course, there are many social engineering options possible to trick users to attack themselves. Personally, I think the best option would be to simply do nothing and wait for developers (the more valuable targets) to attack themselves. But, onto the proof of concept. It has a simple, full screen, invisible iframe of picasa.google.com (contains/contained Google domain cookies). Inspecting any point on the page, then begining to type a command on the console will trigger a `alert(document.domain)` from the iframe:
+	Of course, there are many social engineering options possible to trick users to attack themselves. Personally, I think the best option would be to simply do nothing and wait for developers (the more valuable targets) to attack themselves. But, onto the proof of concept. It has a simple, full screen, invisible iframe of picasa.google.com (contains/contained Google domain cookies). Inspecting any point on the page, then beginning to type a command on the console will trigger a `alert(document.domain)` from the iframe:
 	```javascript
 	// On console command run
 	Object.defineProperty(console, '_commandLineAPI', {
@@ -567,5 +567,5 @@
 	* February 27th, 2013: Response to vendor with more information about severity
 	* February 27th, 2013: Issue marked as Priority 2 and Severity Low
 	* February 28th, 2013: Communication with vendor
-	* September 27th, 2013: Request to disclose vulnerability publically (no response)
+	* September 27th, 2013: Request to disclose vulnerability publicly (no response)
 	* February 5th, 2014: Issue made public [here](https://code.google.com/p/chromium/issues/detail?id=178336)
