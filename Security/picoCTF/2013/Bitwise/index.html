@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link href="/assets/css/screen.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="//use.typekit.net/xkx0oup.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){};</script>
+    <title>Bitwise (55) Solution picoCTF 2013 | Hydrant Labs</title>
+  </head>
+  <body onload="prettyPrint()">
+    <div class="main-container">
+      <div class="navbar navbar-default navbar-main">
+        <div class="container">
+          <div class="navbar-header">
+            <div type="button" data-toggle="collapse" data-target=".navbar-collapse" class="button navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></div><a href="#" class="navbar-brand"><img src="/assets/images/logo.png" class="logo"><span class="mix-green">Hydrant </span><span class="mix-gray">Labs</span></a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/index.html" class="mix-gray">Home</a></li>
+              <li><a href="/Projects/index.html" class="mix-gray">Projects</a></li>
+              <li><a href="/Security/index.html" class="mix-gray">Security</a></li>
+              <li><a href="/Contact/index.html" class="mix-gray">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="container"><h1 id="picoctf-2013-bitwise-55-">picoCTF 2013: Bitwise (55)</h1>
+<hr>
+<h2 id="challenge-">Challenge:</h2>
+<p>You see the doors to the loading bay of the hangar, but they are locked. However, you are able to extract the password verification program from the control panel... Can you find the password to gain access to the loading bay?</p>
+<p>Available in <a href="assets/bit.py">Python</a> or <a href="assets/Bit.java">Java</a></p>
+<h2 id="solution-">Solution:</h2>
+<p>First part of problems like these is understanding what is happening. I chose to look at the Java file, but the Python one would work just as well. </p>
+<p>First off, we can see the program in reading in user input (a password), then running the following:</p>
+<pre class="prettyprint lang-java">if (user_key.length() != 10) {
+ System.out.println(&quot;Wrong&quot;);
+ return;
+}
+</pre>
+<p>By looking at this we can tell our password must be 10 characters.</p>
+<p>Next we can see this operation is performed on each character:</p>
+<pre class="prettyprint lang-java">user_arr.add((char)((((ch &lt;&lt; 5) | (ch &gt;&gt; 3)) ^ 111) &amp; 255));
+</pre>
+<p>Following this transformation the data is compared with the following:</p>
+<pre class="prettyprint lang-java">char[] verify_arr = {193, 35, 9, 33, 1, 9, 3, 33, 9, 225};
+</pre>
+<p>If all values match, the result is a <code>Success</code>. In this case, it means the password we entered is the flag.</p>
+<p>The first step in finding the solution is to understand what each step of the operation is doing to input. Let&#39;s start with the character <code>a</code> which has a binary representation of:</p>
+<pre>1100001
+</pre><p>The operation starts by performing a left shift of 5 on the value, which in our case results in:</p>
+<pre>110000100000
+</pre><p>Next it performs a right shift of 3 on the original value, which in our case results in:</p>
+<pre>1100
+</pre><p>Next it performs a bit-wise or on both of the values resulting in the following:</p>
+<pre>110000101100
+</pre><p>The value of the bit-wise or is then bit-wise xor&#39;d with 111 resulting in the following:</p>
+<pre>110001000011
+</pre><p>Finally, the value of the bit-wise xor is bit-wise and&#39;d with 255 resulting in the following:</p>
+<pre>1000011
+</pre><p>This a value of <code>67</code> which would then be compared with a value from <code>verify_arr</code>.</p>
+<p>Now, let&#39;s run through the program in reverse, starting with one of our values from verify_arr, <code>193</code> which can be represented in binary as the following:</p>
+<pre>11000001
+</pre><p>The first operation we&#39;ll need to reverse is the bit-wise and with 255 which we can do by simply cutting off the result to the last 8 bits (in this case, no change):</p>
+<pre>11000001
+</pre><p>Following this a bit-wise XOR was performed with 111. We can reverse this by taking the binary representation of <code>111</code> (<code>01101111</code>) and determining what values would be required to get the output listed above. Doing so we get:</p>
+<pre>10101110
+</pre><p>Knowing that our data 5 digits to the left must be the end of our original value and the rest must be the beginning we get the following binary:</p>
+<pre>01110101
+</pre><p>Which can be represented as the letter <code>u</code>. </p>
+<p>Finally, we must repeat the process for all 10 characters. After doing so, we get the following final flag:</p>
+<pre>ub3rs3cr3t
+</pre>
+      </div>
+      <div class="footer-space"></div>
+      <div class="footer">
+        <div class="container">
+          <p class="muted credit"><span>&copy; 2013 Luke Young. All rights reserved.</span><span class="footer-divider">|</span><span>This site is proudly hosted on <a href="https://digitalocean.com/">Digital Ocean</a>.</span><span class="footer-divider">|</span><span>Site designed, built, and maintained by <a href="http://hydrantlabs.com">Luke Young</a>.</span></p>
+        </div>
+      </div>
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-44361710-1', 'hydrantlabs.org');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>

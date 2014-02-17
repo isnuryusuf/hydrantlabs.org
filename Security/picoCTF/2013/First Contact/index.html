@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link href="/assets/css/screen.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="//use.typekit.net/xkx0oup.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){};</script>
+    <title>First Contact (40) Solution picoCTF 2013 | Hydrant Labs</title>
+  </head>
+  <body onload="prettyPrint()">
+    <div class="main-container">
+      <div class="navbar navbar-default navbar-main">
+        <div class="container">
+          <div class="navbar-header">
+            <div type="button" data-toggle="collapse" data-target=".navbar-collapse" class="button navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></div><a href="#" class="navbar-brand"><img src="/assets/images/logo.png" class="logo"><span class="mix-green">Hydrant </span><span class="mix-gray">Labs</span></a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/index.html" class="mix-gray">Home</a></li>
+              <li><a href="/Projects/index.html" class="mix-gray">Projects</a></li>
+              <li><a href="/Security/index.html" class="mix-gray">Security</a></li>
+              <li><a href="/Contact/index.html" class="mix-gray">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="container"><h1 id="picoctf-2013-first-contact-40-">picoCTF 2013: First Contact (40)</h1>
+<hr>
+<h2 id="challenge-">Challenge:</h2>
+<p>You notice that the indicator light near the robot’s antenna begins to blink. Perhaps the robot is connecting to a network? Using a wireless card and the network protocol analyzer Wireshark, you are able to create a PCAP file containing the packets sent over the network.</p>
+<p>You suspect that the robot is communicating with the crashed ship. Your goal is to find the location of the ship by inspecting the network traffic.</p>
+<p>You can perform the analysis online on <a href="http://www.cloudshark.org/captures/bc1c0a7fae2c">Cloudshark</a> or you can download the <a href="assets/first_contact.pcap">PCAP file</a>.</p>
+<h2 id="solution-">Solution:</h2>
+<p>Looking at packet data we see the following combined packet data (I&#39;ve seperated it with newlines for readability):</p>
+<pre>ROBOT BOOTUP INITIALIZING..
+SPACE SHIP READY..
+BOOTUP BEGIN..
+FIRMWARE STATUS.... COMPLETE..
+LOCATION STATUS.... ERROR..
+****BOOT ERROR****..
+COULD NOT READ FROM DISK ID 0xEF982DA0..
+INITIALIZE RECOVERY PROCEDURE 0xCD950422..
+PROCEDURE 0xCD950422 STATUS.... COMPLETE..
+AWAITING NEW LOCATION STATUS..
+NEW LOCATION STATUS: 302..
+NEW LOCATION COORDINATES: 37 14&#39;06&quot;N 115 48&#39;40&quot;W..
+NEW LOCATION INFO: LOCKED..
+NEW LOCATION UPDATE COMPLETE..
+NEW LOCATION UPDATE SUCCESS..
+</pre><p>A <a href="http://lmgtfy.com/?q=37+14%2706%22N+115+48%2740%22W">simple google</a> search of <code>37 14&#39;06&quot;N 115 48&#39;40&quot;W</code> tells us these are the coordinates of Area 51. This leaves us with the key:</p>
+<pre>Area 51
+</pre>
+      </div>
+      <div class="footer-space"></div>
+      <div class="footer">
+        <div class="container">
+          <p class="muted credit"><span>&copy; 2013 Luke Young. All rights reserved.</span><span class="footer-divider">|</span><span>This site is proudly hosted on <a href="https://digitalocean.com/">Digital Ocean</a>.</span><span class="footer-divider">|</span><span>Site designed, built, and maintained by <a href="http://hydrantlabs.com">Luke Young</a>.</span></p>
+        </div>
+      </div>
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-44361710-1', 'hydrantlabs.org');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>

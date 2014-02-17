@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link href="/assets/css/screen.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="//use.typekit.net/xkx0oup.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){};</script>
+    <title>NAVSAT (70) Solution picoCTF 2013 | Hydrant Labs</title>
+  </head>
+  <body onload="prettyPrint()">
+    <div class="main-container">
+      <div class="navbar navbar-default navbar-main">
+        <div class="container">
+          <div class="navbar-header">
+            <div type="button" data-toggle="collapse" data-target=".navbar-collapse" class="button navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></div><a href="#" class="navbar-brand"><img src="/assets/images/logo.png" class="logo"><span class="mix-green">Hydrant </span><span class="mix-gray">Labs</span></a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/index.html" class="mix-gray">Home</a></li>
+              <li><a href="/Projects/index.html" class="mix-gray">Projects</a></li>
+              <li><a href="/Security/index.html" class="mix-gray">Security</a></li>
+              <li><a href="/Contact/index.html" class="mix-gray">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="container"><h1 id="picoctf-2013-navsat-70-">picoCTF 2013: NAVSAT (70)</h1>
+<hr>
+<h2 id="challenge-">Challenge:</h2>
+<p>Near the Sun, you find a malfunctioning warp beacon which is broadcasting a distress signal in a navigational channel. It looks like it&#39;s been damaged by solar radiation, and <a href="assets/recovery.zip">some of its data</a> have been corrupted. If you can recover it, perhaps it will point at you to something interesting.</p>
+<h2 id="solution-">Solution:</h2>
+<p>First off, if we attempt to download the file and extract it we get the following error:</p>
+<pre>Archive:  recovery.zip
+file #1:  bad zipfile offset (local header sig):  0
+ inflating: Mag7-BW/Chart-15.pdf
+</pre><p>While it&#39;s completely possible to repair the zip file, I took the easier route. I simply ran the following command:</p>
+<pre class="prettyprint lang-shell">strings -n 10 recovery.zip
+</pre>
+<p>This command will search for ASCII strings greater than or equal to 10 characters in length within the file. The command results in the following output:</p>
+<pre>Mag7-BW/key.txtUT
+Key: Next stop Tau Eridani
+Mag7-BW/Chart-15.pdfUT
+^uo_=+5d]L
+/;;J`(k}4qcM
+@^tF g$i8mQ
+g2?B?9|X%H
+Z#~`,0$&#39;`:-
+SUzviDM7&gt;{
+4=\F~F1LOaPL
+Ln6O;6H+V(
+W~Hmwkt)Ye{
+Mag7-BW/UT
+Mag7-BW/key.txtUT
+Mag7-BW/Chart-15.pdfUT
+Mag7-BW/UT
+</pre><p>We can clearly see our key in the second row:</p>
+<pre>Next stop Tau Eridani
+</pre>
+      </div>
+      <div class="footer-space"></div>
+      <div class="footer">
+        <div class="container">
+          <p class="muted credit"><span>&copy; 2013 Luke Young. All rights reserved.</span><span class="footer-divider">|</span><span>This site is proudly hosted on <a href="https://digitalocean.com/">Digital Ocean</a>.</span><span class="footer-divider">|</span><span>Site designed, built, and maintained by <a href="http://hydrantlabs.com">Luke Young</a>.</span></p>
+        </div>
+      </div>
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-44361710-1', 'hydrantlabs.org');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link href="/assets/css/screen.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="//use.typekit.net/xkx0oup.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){};</script>
+    <title>Classic (70) Solutino picoCTF 2013 | Hydrant Labs</title>
+  </head>
+  <body onload="prettyPrint()">
+    <div class="main-container">
+      <div class="navbar navbar-default navbar-main">
+        <div class="container">
+          <div class="navbar-header">
+            <div type="button" data-toggle="collapse" data-target=".navbar-collapse" class="button navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></div><a href="#" class="navbar-brand"><img src="/assets/images/logo.png" class="logo"><span class="mix-green">Hydrant </span><span class="mix-gray">Labs</span></a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/index.html" class="mix-gray">Home</a></li>
+              <li><a href="/Projects/index.html" class="mix-gray">Projects</a></li>
+              <li><a href="/Security/index.html" class="mix-gray">Security</a></li>
+              <li><a href="/Contact/index.html" class="mix-gray">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="container"><h1 id="picoctf-2013-classic-70-">picoCTF 2013: Classic (70)</h1>
+<hr>
+<h2 id="challenge-">Challenge:</h2>
+<p>Someone or something stuck a random flyer on your space ship that reads:</p>
+<pre>cslcehesehft ohrumvc zmvm scmk ht ptohmte ehbmc mxmt eufsju eumq pvm dshem mpchgq lvfymt zheu nsce p rmtohg ptk rprmv, fv bfvm vmomtegq lq ofbbft ofbrsemvhwmk effgc. qfsv ymq hc: zumt_kf_zm_jme_ef_eum_upvk_cesii
+</pre><h2 id="solution-">Solution:</h2>
+<p>A quick look at the ciphertext it is clear this a simple substitution cipher. While one could certainly go about breaking this manually, there is no reason not to use the power of computers. I threw the ciphertext into <a href="http://www.blisstonia.com/software/WebDecrypto/index.php">Decrypto</a> and a few seconds later I got the plaintext:</p>
+<pre>substitution ciphers were used in ancient times even though they are quite easily broken with just a pencil and paper, or more recently by common computerized tools. your key is: when_do_we_get_to_the_hard_stuff
+</pre><p>Clearly the final key is:</p>
+<pre>when_do_we_get_to_the_hard_stuff
+</pre>
+      </div>
+      <div class="footer-space"></div>
+      <div class="footer">
+        <div class="container">
+          <p class="muted credit"><span>&copy; 2013 Luke Young. All rights reserved.</span><span class="footer-divider">|</span><span>This site is proudly hosted on <a href="https://digitalocean.com/">Digital Ocean</a>.</span><span class="footer-divider">|</span><span>Site designed, built, and maintained by <a href="http://hydrantlabs.com">Luke Young</a>.</span></p>
+        </div>
+      </div>
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-44361710-1', 'hydrantlabs.org');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>
