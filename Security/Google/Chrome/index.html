@@ -390,7 +390,7 @@ Object.defineProperty(console, &#39;_commandLineAPI&#39;, {
  }
 });
 </pre>
-<p>As you can see there is clearly a lot of potential for abuse here, thankfully this issue was patched. Though not by the Chrome team (as far as I can tell) by the WebKit team <a href="http://trac.webkit.org/changeset/138228">here</a>.</p>
+<p>As you can see there is clearly a lot of potential for abuse here, thankfully this issue was patched. <del>Though not by the Chrome team (as far as I can tell) by the WebKit team</del> Correction: The patch was implemented by yurys@chromium.org <a href="http://trac.webkit.org/changeset/138228">here</a>.</p>
 <h2 id="-a-name-final_vulnerabilities-a-final-vulnerabilities"><a name="Final_Vulnerabilities"></a>Final Vulnerabilities</h2>
 <p>You may have noticed the use of <code>InjectedScriptHost.functionDetails</code>. This is the most powerful function and opens a whole bunch of doors to other potential issues. The <code>functionDetails</code> allows the inspection of a functions location (which file and what line) as well as the scopes that function executes in. Here&#39;s a quick example of it&#39;s use in a generic setting:</p>
 <pre class="prettyprint lang-javascript">// Add another scope
